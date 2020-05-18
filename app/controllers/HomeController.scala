@@ -17,11 +17,14 @@ import scala.io.Source
 class HomeController @Inject()(cc: ControllerComponents) extends AbstractController(cc) with play.api.i18n.I18nSupport {
 
   def registerUser = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.registerUser(UserRegisterForm.form))
+    Ok(views.html.registerUser(UserRegisterForm.userForm))
   }
 
-  def submitUser = Action {
-    Ok("done!")
+  def submitUser = Action(parse.form(UserRegisterForm.userForm)) { implicit request =>
+    val userData = request.body
+    val newUser  = models.User(userData.name, userData.email, userData.password)
+    println(newUser.name)
+    Redirect(routes.HomeController.index())
   }
 
   def index = Action {

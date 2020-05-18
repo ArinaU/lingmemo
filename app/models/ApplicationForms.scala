@@ -17,7 +17,7 @@ object FileUploadForm {
 case class UserRegisterForm(name: String, email: String, password: String)
 
 object UserRegisterForm {
-  val form: Form[UserRegisterForm] = Form(
+  val userForm: Form[UserRegisterForm] = Form(
     mapping(
       "name" -> nonEmptyText,
       "email" -> nonEmptyText,
