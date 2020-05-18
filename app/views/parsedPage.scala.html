@@ -1,0 +1,42 @@
+@import helper._
+
+
+@(text: String)
+
+@main("Scala Play forms tutorial") {
+        <p>@text</p>
+        <input type="submit" id="submit" value="Ok">
+}
+
+<script>
+
+        var words = $( "p" ).first().text().split( /\s+/ );
+        var text = words.join( "</span> <span>" );
+
+        $( "p" ).first().html( "<span>" + text + "</span>" );
+        $( "span" ).on( "click", function() {
+            $(this).toggleClass('selectedWordClass');
+        });
+
+        $('#submit').click(function() {
+            var allWords = $(".selectedWordClass").map(function() {
+                return this.innerHTML;
+         }).get();
+
+            // $.post("/addToDictionary", { data: allWords }, function(data) {
+            //     alert("Contact added!");
+            // });
+            $.ajax({
+                url: '/addToDictionary',
+                dataType: 'json',
+                type: 'post',
+                contentType: 'application/json',
+                data: JSON.stringify( { data: allWords } ),
+                success: function( data, textStatus, jQxhr ){
+                    alert(data);
+                }
+            });
+
+        });
+
+</script>
