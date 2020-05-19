@@ -19,20 +19,38 @@ import scala.concurrent.Future
 @Singleton
 class HomeController @Inject()(cc: ControllerComponents) extends AbstractController(cc) with play.api.i18n.I18nSupport {
 
-  def registerUser = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.registerUser(UserRegisterForm.userForm))
+  def register = Action { implicit request: Request[AnyContent] =>
+    Ok(views.html.register(UserRegisterForm.registerForm))
+  }
+
+  def login = Action { implicit request: Request[AnyContent] =>
+    Ok(views.html.login(UserLoginForm.loginForm))
+  }
+
+  def loginUser = Action.async { implicit request: Request[AnyContent] =>
+    UserLoginForm.loginForm.bindFromRequest.fold(
+      errorForm => {
+        Future.successful(NotFound("Form is incorrect"))
+      },
+      data => {
+        val query = UserRepositoryHelper.find(data.email, data.password)
+        query.map { q => q.map { _ => Redirect(routes.HomeController.index()) }
+          .getOrElse(NotFound("Oh no!")) }
+      }
+    )
   }
 
 
   def addUser= Action.async { implicit request: Request[AnyContent] =>
-    UserRegisterForm.userForm.bindFromRequest.fold(
+    UserRegisterForm.registerForm.bindFromRequest.fold(
       errorForm => {
         Future.successful(Redirect(routes.HomeController.index()))
       },
       data => {
         val newUser = User(data.name, data.email, data.password)
         UserRepositoryHelper.insert(newUser).map( _ => Redirect(routes.HomeController.index()))
-      })
+      }
+    )
   }
 
 
@@ -41,7 +59,7 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
   }
 
   def uploadFileForm = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.form(FileUploadForm.form))
+    Ok(views.html.fileForm(FileUploadForm.form))
   }
 
   def parseFile(file: String) = Action {

@@ -21,6 +21,10 @@ object UserRepositoryHelper {
   val users = lifted.TableQuery[UserRepository]
   val db = Database.forConfig("db")
 
-  def insert(user: User) = db.run { users += user }.map { _ => () }
+  def insert(user: User) = db.run { users += user }.map { _ => () } // transform into Unit
+
+  def find(email: String, password: String) = db.run {
+    users.filter( x => { x.email === email && x.password === password }).result.headOption //head() - take only first result
+  }
 
 }

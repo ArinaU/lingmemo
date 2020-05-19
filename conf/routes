@@ -5,8 +5,11 @@
 
 # An example controller showing a sample home page
 GET     /                             controllers.HomeController.index
-GET     /registerUser                 controllers.HomeController.registerUser
+GET     /register                     controllers.HomeController.register
 POST    /addUser                      controllers.HomeController.addUser
+GET     /login                        controllers.HomeController.login
+POST     /loginUser                    controllers.HomeController.loginUser
+
 
 GET     /parsefile/:file              controllers.HomeController.parseFile(file: String)
 POST    /addToDictionary              controllers.HomeController.addToDictionary
