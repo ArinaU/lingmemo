@@ -3,7 +3,7 @@
 
 @main("Scala Play forms tutorial") {
 
-    @helper.form(action = routes.HomeController.submitFileForm(), Symbol("enctype") -> "multipart/form-data") {
+    @helper.form(action = routes.HomeController.submitFileForm(), Symbol("enctype") -> "multipart/fileForm-data") {
         @helper.inputFile(fileForm("name"))
         <input type="submit" value="Submit">
     }
