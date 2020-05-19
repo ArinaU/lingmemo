@@ -5,7 +5,7 @@
 
     <h3>Register</h3>
 
-    @helper.form(action = routes.HomeController.submitUser()) {
+    @helper.form(action = routes.HomeController.addUser()) {
         @helper.inputText(userForm("name"))
         @helper.inputText(userForm("email"))
         @helper.inputPassword(userForm("password"))

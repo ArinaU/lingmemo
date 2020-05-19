@@ -5,14 +5,14 @@
 
 # An example controller showing a sample home page
 GET     /                             controllers.HomeController.index
-GET     /registerUser                     controllers.HomeController.registerUser
-POST     /submitUser                     controllers.HomeController.submitUser
+GET     /registerUser                 controllers.HomeController.registerUser
+POST    /addUser                      controllers.HomeController.addUser
 
 GET     /parsefile/:file              controllers.HomeController.parseFile(file: String)
 POST    /addToDictionary              controllers.HomeController.addToDictionary
 
 GET      /uploadFileForm              controllers.HomeController.uploadFileForm
-POST     /submitFileForm                  controllers.HomeController.submitFileForm
+POST     /submitFileForm              controllers.HomeController.submitFileForm
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

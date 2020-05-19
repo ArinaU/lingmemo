@@ -3,11 +3,14 @@ package controllers
 import java.io.File
 import java.nio.file.Paths
 
-import javax.inject._
 import play.api.mvc._
 import models._
+import models.UserRepositoryHelper
+import com.google.inject.{Inject, Singleton}
 
-import scala.io.Source
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+
 
 /**
  * This controller creates an `Action` to handle HTTP requests to the
@@ -20,12 +23,18 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
     Ok(views.html.registerUser(UserRegisterForm.userForm))
   }
 
-  def submitUser = Action(parse.form(UserRegisterForm.userForm)) { implicit request =>
-    val userData = request.body
-    val newUser  = models.User(userData.name, userData.email, userData.password)
-    println(newUser.name)
-    Redirect(routes.HomeController.index())
+
+  def addUser= Action.async { implicit request: Request[AnyContent] =>
+    UserRegisterForm.userForm.bindFromRequest.fold(
+      errorForm => {
+        Future.successful(Redirect(routes.HomeController.index()))
+      },
+      data => {
+        val newUser = User(data.name, data.email, data.password)
+        UserRepositoryHelper.insert(newUser).map( _ => Redirect(routes.HomeController.index()))
+      })
   }
+
 
   def index = Action {
     Ok(views.html.index())

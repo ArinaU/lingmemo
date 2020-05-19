@@ -13,7 +13,7 @@ sealed trait Translation {
 case class EnglishRussianTranslation(term: String, definitions: Seq[String]) extends Translation
 case class GermanRussianTranslation(term: String, definitions: Seq[String]) extends Translation
 
-case class User(name: String, email: String, password: String)
+case class User(name: String, email: String, password: String, id: Long = 0L)
 
 sealed trait UserVocabulary {
   def user: User
