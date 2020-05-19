@@ -23,9 +23,6 @@
                 return this.innerHTML;
          }).get();
 
-            // $.post("/addToDictionary", { data: allWords }, function(data) {
-            //     alert("Contact added!");
-            // });
             $.ajax({
                 url: '/addToDictionary',
                 dataType: 'json',
