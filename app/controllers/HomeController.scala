@@ -5,12 +5,14 @@ import java.nio.file.Paths
 
 import play.api.mvc._
 import models._
-import models.UserRepositoryHelper
+import dao._
 import com.google.inject.{Inject, Singleton}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import play.api.libs.json._
 
+import play.api.http.HeaderNames.COOKIE
 
 /**
  * This controller creates an `Action` to handle HTTP requests to the
@@ -33,8 +35,10 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
         Future.successful(NotFound("Form is incorrect"))
       },
       data => {
-        val query = UserRepositoryHelper.find(data.email, data.password)
-        query.map { q => q.map { _ => Redirect(routes.HomeController.index()) }
+        val query = UserDAO.getWithPassword(data.email, data.password)
+        query.map { q => q.map { _ =>
+          Ok(views.html.index()).withCookies(Cookie("User", data.email))
+        }
           .getOrElse(NotFound("Oh no!")) }
       }
     )
@@ -48,7 +52,7 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
       },
       data => {
         val newUser = User(data.name, data.email, data.password)
-        UserRepositoryHelper.insert(newUser).map( _ => Redirect(routes.HomeController.index()))
+        UserDAO.create(newUser).map( _ => Redirect(routes.HomeController.index()))
       }
     )
   }
@@ -68,12 +72,46 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
     Ok(views.html.parsedPage(text))
   }
 
-  def addToDictionary = Action { request =>
-    val words = request.body match {
-      case AnyContentAsJson(json) => json("data")
+  def addToDictionary = Action.async { request =>
+    val userCookie = request.cookies.get("User") match {
+      case Some(cookie) => cookie.value
+      case None => ""
     }
-    Ok("ok")
+    val words = request.body match {
+      case AnyContentAsJson(json) => Json.parse(json("data").toString()).as[List[String]]
+      case _ => List() // error processing here
+    }
+    UserDAO.get(userCookie).map {
+      case Some(user) => {
+        println(words)
+        println(EngRusLearningWordListDAO.update(user.id, words))
+        Redirect(routes.HomeController.getUserDictionary())
+      }
+      case None => Redirect(routes.HomeController.index()) // add functionality here
+    }
   }
+
+
+  def getUserDictionary = Action.async { request =>
+    val userCookie = request.cookies.get("User") match {
+      case Some(cookie) => cookie.value
+      case None => ""
+    }
+    UserDAO.get(userCookie) flatMap {
+      case Some(user) => {
+        EngRusLearningWordListDAO.get(user.id) flatMap {
+          case Some(l) => {
+            val res = l.unknownWords.toString()
+            Future.successful(Ok(views.html.userDictionary(res)))
+          }
+          case None => Future.successful(NotFound("No result"))
+        }
+
+      }
+      case None => Future.successful(NotFound("No user"))
+      }
+  }
+
 
   def submitFileForm = Action(parse.multipartFormData) { request =>
     request.body.file("name").map { file =>

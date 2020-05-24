@@ -3,7 +3,7 @@
 
 @(text: String)
 
-@main("Scala Play forms tutorial") {
+@main("Lingmemo") {
         <p>@text</p>
         <input type="submit" id="submit" value="Ok">
 }
@@ -30,9 +30,10 @@
                 contentType: 'application/json',
                 data: JSON.stringify( { data: allWords } ),
                 success: function( data, textStatus, jQxhr ){
-                    alert(data);
+                    alert("ok")
                 }
             });
+
 
         });
 

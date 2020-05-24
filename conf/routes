@@ -8,11 +8,12 @@ GET     /                             controllers.HomeController.index
 GET     /register                     controllers.HomeController.register
 POST    /addUser                      controllers.HomeController.addUser
 GET     /login                        controllers.HomeController.login
-POST     /loginUser                    controllers.HomeController.loginUser
+POST     /loginUser                   controllers.HomeController.loginUser
 
 
 GET     /parsefile/:file              controllers.HomeController.parseFile(file: String)
 POST    /addToDictionary              controllers.HomeController.addToDictionary
+GET      /getUserDictionary              controllers.HomeController.getUserDictionary
 
 GET      /uploadFileForm              controllers.HomeController.uploadFileForm
 POST     /submitFileForm              controllers.HomeController.submitFileForm
