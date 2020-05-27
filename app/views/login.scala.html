@@ -1,12 +1,10 @@
-
-
 @(userForm: Form[UserLoginForm])(implicit messages: Messages)
 
 @main("Login") {
 
     <h3>Login</h3>
 
-    @helper.form(action = routes.HomeController.loginUser()) {
+    @helper.form(action = routes.UserController.loginUser()) {
         @helper.inputText(userForm("email"))
         @helper.inputPassword(userForm("password"))
         <input type="submit" value="Submit">

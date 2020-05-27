@@ -4,21 +4,22 @@
 # ~~~~
 
 # An example controller showing a sample home page
-GET     /                             controllers.HomeController.index
-GET     /register                     controllers.HomeController.register
-POST    /addUser                      controllers.HomeController.addUser
-GET     /login                        controllers.HomeController.login
-POST     /loginUser                   controllers.HomeController.loginUser
+GET         /                         controllers.HomeController.index
+GET         /register                 controllers.UserController.register
+POST        /addUser                  controllers.UserController.addUser
+GET         /login                    controllers.UserController.login
+POST        /loginUser                controllers.UserController.loginUser
 
 
-GET     /parsefile/:file              controllers.HomeController.parseFile(file: String)
-POST    /addToDictionary              controllers.HomeController.addToDictionary
-GET      /getUserDictionary              controllers.HomeController.getUserDictionary
+GET         /parsefile/:file          controllers.FileUploadController.parseFile(file: String)
+GET         /uploadFileForm           controllers.FileUploadController.uploadFileForm
+POST        /submitFileForm           controllers.FileUploadController.submitFileForm
 
-GET      /uploadFileForm              controllers.HomeController.uploadFileForm
-POST     /submitFileForm              controllers.HomeController.submitFileForm
+POST        /addToDictionary          controllers.HomeController.addToDictionary
+GET         /getUserDictionary        controllers.HomeController.getUserDictionary
+
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+GET         /assets/*file             controllers.Assets.versioned(path="/public", file: Asset)
 
       

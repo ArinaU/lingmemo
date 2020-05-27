@@ -1,9 +1,8 @@
-
 @(fileForm: Form[FileUploadForm])(implicit messages: Messages)
 
 @main("Upload file") {
 
-    @helper.form(action = routes.HomeController.submitFileForm(), Symbol("enctype") -> "multipart/form-data") {
+    @helper.form(action = routes.FileUploadController.submitFileForm(), Symbol("enctype") -> "multipart/form-data") {
         @helper.inputFile(fileForm("name"))
         <input type="submit" value="Submit">
     }

@@ -1,4 +1,5 @@
 package models
+
 import play.api.data.Form
 import play.api.data.Forms._
 
@@ -8,8 +9,8 @@ case class FileUploadForm(name: String)
 object FileUploadForm {
   val form: Form[FileUploadForm] = Form(
     mapping(
-    "name" -> text
-  )(FileUploadForm.apply)(FileUploadForm.unapply)
+      "name" -> text
+    )(FileUploadForm.apply)(FileUploadForm.unapply)
   )
 }
 

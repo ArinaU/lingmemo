@@ -16,12 +16,10 @@ libraryDependencies ++= Seq(
   specs2 % Test,
   guice)
 
-//libraryDependencies ++= Seq(
-//  jdbc
-//)
 
 libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-slick" % "4.0.0",
+  "com.github.tminglei" %% "slick-pg" % "0.19.0",
   "com.typesafe.play" %% "play-slick-evolutions" % "4.0.0"
 )
 
@@ -29,6 +27,6 @@ libraryDependencies += "org.webjars" % "jquery" % "2.1.3"
 
 libraryDependencies += "org.postgresql" % "postgresql" % "9.3-1100-jdbc41"
 
-unmanagedResourceDirectories in Test <+= baseDirectory(_ / "target/web/public/test")  
 
+unmanagedResourceDirectories in Test <+= baseDirectory(_ / "target/web/public/test")
       
