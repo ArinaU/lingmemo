@@ -84,7 +84,7 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
     UserDAO.get(userCookie).map {
       case Some(user) => {
         println(words)
-        println(EngRusLearningWordListDAO.update(user.id, words))
+        println(EngRusWordListDAO.update(user.id, words))
         Redirect(routes.HomeController.getUserDictionary())
       }
       case None => Redirect(routes.HomeController.index()) // add functionality here
@@ -99,7 +99,7 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
     }
     UserDAO.get(userCookie) flatMap {
       case Some(user) => {
-        EngRusLearningWordListDAO.get(user.id) flatMap {
+        EngRusWordListDAO.get(user.id) flatMap {
           case Some(l) => {
             val res = l.unknownWords.toString()
             Future.successful(Ok(views.html.userDictionary(res)))

@@ -11,7 +11,7 @@ import slick.dbio.DBIOAction
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
 
-class EngRusLearningWordListDAO(tag: Tag) extends Table[EngRusLearningWordList](tag, "eng_rus_learning_word_list") {
+class EngRusWordListDAO(tag: Tag) extends Table[EngRusWordList](tag, "eng_rus_learning_word_list") {
 
   def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
   def userId = column[Long]("user_id")
@@ -19,15 +19,16 @@ class EngRusLearningWordListDAO(tag: Tag) extends Table[EngRusLearningWordList](
   def user = foreignKey("user_FK", userId, users)(_.id, onUpdate=ForeignKeyAction.Restrict, onDelete=ForeignKeyAction.Cascade)
 
 
-  override def * = (userId, unknownWords, id) <> ((EngRusLearningWordList.mapperTo _).tupled, EngRusLearningWordList.unapply)
+  override def * = (userId, unknownWords, id) <> ((EngRusWordList.mapperTo _).tupled, EngRusWordList.unapply)
 }
 
 
-object EngRusLearningWordListDAO {
-  val lists = lifted.TableQuery[EngRusLearningWordListDAO]
+object EngRusWordListDAO {
+
+  val lists = lifted.TableQuery[EngRusWordListDAO]
   val db = Database.forConfig("db")
 
-  def create(list: EngRusLearningWordList) = db.run { lists += list }.map { _ => () }
+  def create(list: EngRusWordList) = db.run { lists += list }.map { _ => () }
 
   def get(userId: Long) = db.run {
     lists.filter( x => { x.userId === userId }).result.headOption
